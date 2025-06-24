@@ -17,7 +17,7 @@ function Get-HaloCustomTable {
         [int64]$CustomTableId
     )
     Invoke-HaloPreFlightCheck
-    $CommandName = $MyInvocation.InvocationName
+    $CommandName = $MyInvocation.MyCommand.Name
     $Parameters = (Get-Command -Name $CommandName).Parameters
     # Workaround to prevent the query string processor from adding an 'customtableid=' parameter by removing it from the set parameters.
     if ($CustomTableId) {
@@ -25,7 +25,7 @@ function Get-HaloCustomTable {
     }
     $QSCollection = New-HaloQuery -CommandName $CommandName -Parameters $Parameters
     try {
-        if ($AgentID) {
+        if ($CustomTableId) {
             Write-Verbose "Running in single-custom table mode because '-CustomTableId' was provided."
             $Resource = "api/customtable/$($CustomTableId)"
         } else {
